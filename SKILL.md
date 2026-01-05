@@ -9,7 +9,7 @@ metadata: {"clawdis":{"emoji":"💪","requires":{"bins":["node"],"env":["WHOOP_C
 
 Use `whoopskill` to fetch WHOOP health metrics (sleep, recovery, HRV, strain, workouts).
 
-Install: `npm install -g whoopskill`
+Install: `npm install -g whoopskill` | [GitHub](https://github.com/koala73/whoopskill)
 
 Quick start
 - `whoopskill summary` — one-liner: Recovery: 52% | HRV: 39ms | Sleep: 40% | Strain: 6.7
