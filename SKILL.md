@@ -37,3 +37,110 @@ Notes
 - Tokens stored in `~/.whoop-cli/tokens.json` (auto-refresh)
 - Uses WHOOP API v2
 - Date follows WHOOP day boundary (4am cutoff)
+
+Sample output
+```json
+{
+  "date": "2026-01-05",
+  "fetched_at": "2026-01-05T13:49:22.782Z",
+  "body": {
+    "height_meter": 1.83,
+    "weight_kilogram": 82.5,
+    "max_heart_rate": 182
+  },
+  "sleep": [
+    {
+      "id": "4c311bd4-370f-49ff-b58c-0578d543e9d2",
+      "cycle_id": 1236731435,
+      "user_id": 245199,
+      "created_at": "2026-01-05T00:23:34.264Z",
+      "updated_at": "2026-01-05T02:23:54.686Z",
+      "start": "2026-01-04T19:51:57.280Z",
+      "end": "2026-01-05T01:30:48.660Z",
+      "timezone_offset": "+04:00",
+      "nap": false,
+      "score_state": "SCORED",
+      "score": {
+        "stage_summary": {
+          "total_in_bed_time_milli": 20331380,
+          "total_awake_time_milli": 4416000,
+          "total_light_sleep_time_milli": 6968320,
+          "total_slow_wave_sleep_time_milli": 4953060,
+          "total_rem_sleep_time_milli": 3994000,
+          "sleep_cycle_count": 4,
+          "disturbance_count": 4
+        },
+        "sleep_needed": {
+          "baseline_milli": 26783239,
+          "need_from_sleep_debt_milli": 6637715,
+          "need_from_recent_strain_milli": 148919
+        },
+        "respiratory_rate": 14.12,
+        "sleep_performance_percentage": 40,
+        "sleep_consistency_percentage": 60,
+        "sleep_efficiency_percentage": 78.28
+      }
+    }
+  ],
+  "workout": [
+    {
+      "id": "4279883e-3d23-45cd-848c-3afa28dca3f8",
+      "user_id": 245199,
+      "start": "2026-01-05T03:14:13.417Z",
+      "end": "2026-01-05T04:06:45.532Z",
+      "sport_name": "hiit",
+      "score_state": "SCORED",
+      "score": {
+        "strain": 6.19,
+        "average_heart_rate": 108,
+        "max_heart_rate": 144,
+        "kilojoule": 819.38,
+        "zone_durations": {
+          "zone_zero_milli": 167000,
+          "zone_one_milli": 1420000,
+          "zone_two_milli": 1234980,
+          "zone_three_milli": 330000,
+          "zone_four_milli": 0,
+          "zone_five_milli": 0
+        }
+      }
+    }
+  ],
+  "profile": {
+    "user_id": 245199,
+    "email": "user@example.com",
+    "first_name": "John",
+    "last_name": "Doe"
+  },
+  "recovery": [
+    {
+      "cycle_id": 1236731435,
+      "sleep_id": "4c311bd4-370f-49ff-b58c-0578d543e9d2",
+      "user_id": 245199,
+      "score_state": "SCORED",
+      "score": {
+        "recovery_score": 52,
+        "resting_heart_rate": 60,
+        "hrv_rmssd_milli": 38.87,
+        "spo2_percentage": 96.4,
+        "skin_temp_celsius": 33.19
+      }
+    }
+  ],
+  "cycle": [
+    {
+      "id": 1236731435,
+      "user_id": 245199,
+      "start": "2026-01-04T19:51:57.280Z",
+      "end": null,
+      "score_state": "SCORED",
+      "score": {
+        "strain": 6.66,
+        "kilojoule": 6172.94,
+        "average_heart_rate": 71,
+        "max_heart_rate": 144
+      }
+    }
+  ]
+}
+```
