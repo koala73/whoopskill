@@ -1,7 +1,7 @@
 ---
 name: whoopskill
 description: WHOOP CLI for fetching health data (sleep, recovery, workouts, HRV, strain).
-homepage: https://github.com/eliehabib/whoopskill
+homepage: https://github.com/koala73/whoopskill
 metadata: {"clawdis":{"emoji":"💪","requires":{"bins":["node"],"env":["WHOOP_CLIENT_ID","WHOOP_CLIENT_SECRET","WHOOP_REDIRECT_URI"]},"install":[{"id":"npm","kind":"npm","package":"whoopskill","bins":["whoopskill"],"label":"Install whoopskill (npm)"}]}}
 ---
 
@@ -9,14 +9,16 @@ metadata: {"clawdis":{"emoji":"💪","requires":{"bins":["node"],"env":["WHOOP_C
 
 Use `whoopskill` to fetch WHOOP health metrics (sleep, recovery, HRV, strain, workouts).
 
+Install: `npm install -g whoopskill`
+
 Quick start
-- `npx whoopskill` — fetch all today's data (JSON)
-- `npx whoopskill summary` — one-liner: Recovery: 52% | HRV: 39ms | Sleep: 40% | Strain: 6.7
-- `npx whoopskill --pretty` — human-readable output with emojis
-- `npx whoopskill recovery` — recovery score, HRV, RHR
-- `npx whoopskill sleep` — sleep performance, stages
-- `npx whoopskill workout` — workouts with strain
-- `npx whoopskill --date 2025-01-03` — specific date
+- `whoopskill summary` — one-liner: Recovery: 52% | HRV: 39ms | Sleep: 40% | Strain: 6.7
+- `whoopskill --pretty` — human-readable output with emojis
+- `whoopskill` — fetch all today's data (JSON)
+- `whoopskill recovery` — recovery score, HRV, RHR
+- `whoopskill sleep` — sleep performance, stages
+- `whoopskill workout` — workouts with strain
+- `whoopskill --date 2025-01-03` — specific date
 
 Data types
 - `profile` — user info (name, email)
@@ -27,15 +29,15 @@ Data types
 - `cycle` — daily strain, calories
 
 Combine types
-- `npx whoopskill --sleep --recovery --body`
+- `whoopskill --sleep --recovery --body`
 
 Auth
-- `npx whoopskill auth login` — OAuth flow (paste callback URL)
-- `npx whoopskill auth status` — check token status
-- `npx whoopskill auth logout` — clear tokens
+- `whoopskill auth login` — OAuth flow (opens browser)
+- `whoopskill auth status` — check token status
+- `whoopskill auth logout` — clear tokens
 
 Notes
-- Output is JSON to stdout
+- Output is JSON to stdout (use `--pretty` for human-readable)
 - Tokens stored in `~/.whoop-cli/tokens.json` (auto-refresh)
 - Uses WHOOP API v2
 - Date follows WHOOP day boundary (4am cutoff)

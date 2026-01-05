@@ -1,37 +1,48 @@
 # WHOOP Skill
 
+[![npm version](https://img.shields.io/npm/v/whoopskill.svg)](https://www.npmjs.com/package/whoopskill)
+
 CLI for fetching WHOOP health data via the WHOOP API v2.
 
+## Install
+
+```bash
+npm install -g whoopskill
+```
+
+## Quick Start
+
+```bash
+# One-liner health snapshot
+whoopskill summary
+# Output: 2026-01-05 | Recovery: 52% | HRV: 39ms | RHR: 60 | Sleep: 40% | Strain: 6.7
+
+# Human-readable output
+whoopskill --pretty
+
+# JSON output (default)
+whoopskill
+```
+
 ## Setup
+
+Before using, you need to configure WHOOP API credentials:
 
 1. Register a WHOOP application at [developer.whoop.com](https://developer.whoop.com)
    - Apps with <10 users don't need WHOOP review (immediate use)
 
-2. Add your redirect URI to the app settings
-
-3. Create `.env` file:
+2. Set environment variables:
 ```bash
-WHOOP_CLIENT_ID=your_client_id
-WHOOP_CLIENT_SECRET=your_client_secret
-WHOOP_REDIRECT_URI=https://your-redirect-uri.com/callback
+export WHOOP_CLIENT_ID=your_client_id
+export WHOOP_CLIENT_SECRET=your_client_secret
+export WHOOP_REDIRECT_URI=https://your-redirect-uri.com/callback
 ```
 
-4. Install (auto-builds):
+Or create a `.env` file in your working directory.
+
+3. Authenticate:
 ```bash
-npm install
-```
-
-## Authentication
-
-```bash
-# Login (opens browser, then paste callback URL)
-npx whoopskill auth login
-
-# Check auth status
-npx whoopskill auth status
-
-# Logout
-npx whoopskill auth logout
+whoopskill auth login
 ```
 
 Tokens are stored in `~/.whoop-cli/tokens.json` and auto-refresh when expired.
@@ -40,32 +51,39 @@ Tokens are stored in `~/.whoop-cli/tokens.json` and auto-refresh when expired.
 
 ```bash
 # Fetch all today's data
-npx whoopskill
+whoopskill
 
 # One-liner health snapshot
-npx whoopskill summary
-# Output: 2026-01-05 | Recovery: 52% | HRV: 39ms | RHR: 60 | Sleep: 40% | Strain: 6.7
+whoopskill summary
 
 # Human-readable output
-npx whoopskill --pretty
+whoopskill --pretty
 
 # Specific data type
-npx whoopskill profile
-npx whoopskill body
-npx whoopskill sleep
-npx whoopskill recovery
-npx whoopskill workout
-npx whoopskill cycle
+whoopskill profile
+whoopskill body
+whoopskill sleep
+whoopskill recovery
+whoopskill workout
+whoopskill cycle
 
 # Multiple types
-npx whoopskill --sleep --recovery --body
+whoopskill --sleep --recovery --body
 
 # Specific date (ISO format)
-npx whoopskill --date 2025-01-03
+whoopskill --date 2025-01-03
 
 # Pagination
-npx whoopskill workout --limit 50
-npx whoopskill workout --all
+whoopskill workout --limit 50
+whoopskill workout --all
+```
+
+## Auth Commands
+
+```bash
+whoopskill auth login   # OAuth flow (opens browser)
+whoopskill auth status  # Check token status
+whoopskill auth logout  # Clear tokens
 ```
 
 ## Data Types
@@ -96,26 +114,19 @@ npx whoopskill workout --all
 
 ## Output
 
-JSON to stdout. Example:
+JSON to stdout by default. Use `--pretty` for human-readable format.
+
 ```json
 {
   "date": "2025-01-05",
   "fetched_at": "2025-01-05T12:00:00.000Z",
   "profile": { "user_id": 123, "first_name": "John" },
   "body": { "height_meter": 1.83, "weight_kilogram": 82.5, "max_heart_rate": 182 },
-  "recovery": [{ "recovery_score": 52, "hrv_rmssd_milli": 38.9 }],
-  "sleep": [{ "sleep_performance_percentage": 40 }],
-  "workout": [{ "strain": 6.2, "sport_name": "hiit" }],
-  "cycle": [{ "strain": 6.7 }]
+  "recovery": [{ "score": { "recovery_score": 52, "hrv_rmssd_milli": 38.9 }}],
+  "sleep": [{ "score": { "sleep_performance_percentage": 40 }}],
+  "workout": [{ "sport_name": "hiit", "score": { "strain": 6.2 }}],
+  "cycle": [{ "score": { "strain": 6.7 }}]
 }
-```
-
-## Development
-
-```bash
-npm run dev      # Run with tsx
-npm run build    # Compile TypeScript
-npm start        # Run compiled
 ```
 
 ## Exit Codes
@@ -132,3 +143,17 @@ npm start        # Run compiled
 
 - Node.js 22+
 - WHOOP membership with API access
+
+## Development
+
+```bash
+git clone https://github.com/koala73/whoopskill.git
+cd whoopskill
+npm install
+npm run dev      # Run with tsx
+npm run build    # Compile TypeScript
+```
+
+## License
+
+MIT
