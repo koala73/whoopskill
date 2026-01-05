@@ -5,6 +5,7 @@ CLI for fetching WHOOP health data via the WHOOP API v2.
 ## Setup
 
 1. Register a WHOOP application at [developer.whoop.com](https://developer.whoop.com)
+   - Apps with <10 users don't need WHOOP review (immediate use)
 
 2. Add your redirect URI to the app settings
 

@@ -37,6 +37,7 @@ Notes
 - Tokens stored in `~/.whoop-cli/tokens.json` (auto-refresh)
 - Uses WHOOP API v2
 - Date follows WHOOP day boundary (4am cutoff)
+- WHOOP apps with <10 users don't need review (immediate use)
 
 Sample output
 ```json
