@@ -15,23 +15,22 @@ WHOOP_CLIENT_SECRET=your_client_secret
 WHOOP_REDIRECT_URI=https://your-redirect-uri.com/callback
 ```
 
-4. Install and build:
+4. Install (auto-builds):
 ```bash
 npm install
-npm run build
 ```
 
 ## Authentication
 
 ```bash
 # Login (opens browser, then paste callback URL)
-whoopskill auth login
+npx whoopskill auth login
 
 # Check auth status
-whoopskill auth status
+npx whoopskill auth status
 
 # Logout
-whoopskill auth logout
+npx whoopskill auth logout
 ```
 
 Tokens are stored in `~/.whoop-cli/tokens.json` and auto-refresh when expired.
@@ -40,25 +39,25 @@ Tokens are stored in `~/.whoop-cli/tokens.json` and auto-refresh when expired.
 
 ```bash
 # Fetch all today's data
-whoopskill
+npx whoopskill
 
 # Specific data type
-whoopskill profile
-whoopskill body
-whoopskill sleep
-whoopskill recovery
-whoopskill workout
-whoopskill cycle
+npx whoopskill profile
+npx whoopskill body
+npx whoopskill sleep
+npx whoopskill recovery
+npx whoopskill workout
+npx whoopskill cycle
 
 # Multiple types
-whoopskill --sleep --recovery --body
+npx whoopskill --sleep --recovery --body
 
 # Specific date (ISO format)
-whoopskill --date 2025-01-03
+npx whoopskill --date 2025-01-03
 
 # Pagination
-whoopskill workout --limit 50
-whoopskill workout --all
+npx whoopskill workout --limit 50
+npx whoopskill workout --all
 ```
 
 ## Data Types

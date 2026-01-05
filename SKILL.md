@@ -10,11 +10,11 @@ metadata: {"clawdis":{"emoji":"💪","requires":{"bins":["node"],"env":["WHOOP_C
 Use `whoopskill` to fetch WHOOP health metrics (sleep, recovery, HRV, strain, workouts).
 
 Quick start
-- `whoopskill` — fetch all today's data
-- `whoopskill recovery` — recovery score, HRV, RHR
-- `whoopskill sleep` — sleep performance, stages
-- `whoopskill workout` — workouts with strain
-- `whoopskill --date 2025-01-03` — specific date
+- `npx whoopskill` — fetch all today's data
+- `npx whoopskill recovery` — recovery score, HRV, RHR
+- `npx whoopskill sleep` — sleep performance, stages
+- `npx whoopskill workout` — workouts with strain
+- `npx whoopskill --date 2025-01-03` — specific date
 
 Data types
 - `profile` — user info (name, email)
@@ -25,12 +25,12 @@ Data types
 - `cycle` — daily strain, calories
 
 Combine types
-- `whoopskill --sleep --recovery --body`
+- `npx whoopskill --sleep --recovery --body`
 
 Auth
-- `whoopskill auth login` — OAuth flow (paste callback URL)
-- `whoopskill auth status` — check token status
-- `whoopskill auth logout` — clear tokens
+- `npx whoopskill auth login` — OAuth flow (paste callback URL)
+- `npx whoopskill auth status` — check token status
+- `npx whoopskill auth logout` — clear tokens
 
 Notes
 - Output is JSON to stdout
