@@ -50,23 +50,45 @@ export interface WhoopSleep {
   score: SleepScore;
 }
 
-export interface WhoopRecovery {
-  cycle_id: number;
-  sleep_id: number;
-  user_id: number;
-  created_at: string;
-  updated_at: string;
-  score: number;
+export interface RecoveryScore {
   user_calibrating: boolean;
   recovery_score: number;
   resting_heart_rate: number;
   hrv_rmssd_milli: number;
-  spo2_percentage: number;
-  skin_temp_celsius: number;
+  spo2_percentage?: number;
+  skin_temp_celsius?: number;
+}
+
+export interface WhoopRecovery {
+  cycle_id: number;
+  sleep_id: string;
+  user_id: number;
+  created_at: string;
+  updated_at: string;
+  score_state: string;
+  score: RecoveryScore;
+}
+
+export interface WorkoutScore {
+  strain: number;
+  average_heart_rate: number;
+  max_heart_rate: number;
+  kilojoule: number;
+  percent_recorded?: number;
+  distance_meter?: number;
+  altitude_gain_meter?: number;
+  zone_durations?: {
+    zone_zero_milli: number;
+    zone_one_milli: number;
+    zone_two_milli: number;
+    zone_three_milli: number;
+    zone_four_milli: number;
+    zone_five_milli: number;
+  };
 }
 
 export interface WhoopWorkout {
-  id: number;
+  id: string;
   user_id: number;
   created_at: string;
   updated_at: string;
@@ -74,10 +96,9 @@ export interface WhoopWorkout {
   end: string;
   timezone_offset: string;
   sport_id: number;
-  strain: number;
-  average_heart_rate: number;
-  max_heart_rate: number;
-  kilojoule: number;
+  sport_name: string;
+  score_state: string;
+  score: WorkoutScore;
 }
 
 export interface CycleScore {
@@ -153,3 +174,5 @@ export interface CombinedOutput {
   date: string;
   fetched_at: string;
 }
+
+export type WhoopData = CombinedOutput;

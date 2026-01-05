@@ -42,6 +42,13 @@ Tokens are stored in `~/.whoop-cli/tokens.json` and auto-refresh when expired.
 # Fetch all today's data
 npx whoopskill
 
+# One-liner health snapshot
+npx whoopskill summary
+# Output: 2026-01-05 | Recovery: 52% | HRV: 39ms | RHR: 60 | Sleep: 40% | Strain: 6.7
+
+# Human-readable output
+npx whoopskill --pretty
+
 # Specific data type
 npx whoopskill profile
 npx whoopskill body
@@ -79,6 +86,7 @@ npx whoopskill workout --all
 | `-d, --date <date>` | Date in ISO format (YYYY-MM-DD) |
 | `-l, --limit <n>` | Max results per page (default: 25) |
 | `-a, --all` | Fetch all pages |
+| `-p, --pretty` | Human-readable output |
 | `--profile` | Include profile |
 | `--body` | Include body measurements |
 | `--sleep` | Include sleep |

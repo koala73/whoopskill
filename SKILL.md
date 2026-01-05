@@ -10,7 +10,9 @@ metadata: {"clawdis":{"emoji":"💪","requires":{"bins":["node"],"env":["WHOOP_C
 Use `whoopskill` to fetch WHOOP health metrics (sleep, recovery, HRV, strain, workouts).
 
 Quick start
-- `npx whoopskill` — fetch all today's data
+- `npx whoopskill` — fetch all today's data (JSON)
+- `npx whoopskill summary` — one-liner: Recovery: 52% | HRV: 39ms | Sleep: 40% | Strain: 6.7
+- `npx whoopskill --pretty` — human-readable output with emojis
 - `npx whoopskill recovery` — recovery score, HRV, RHR
 - `npx whoopskill sleep` — sleep performance, stages
 - `npx whoopskill workout` — workouts with strain

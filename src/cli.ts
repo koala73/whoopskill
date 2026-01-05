@@ -3,9 +3,14 @@ import { login, logout, status as authStatus } from './auth/oauth.js';
 import { fetchData, fetchAllTypes } from './api/client.js';
 import { getWhoopDay, validateISODate } from './utils/date.js';
 import { handleError, WhoopError, ExitCode } from './utils/errors.js';
-import type { DataType } from './types/whoop.js';
+import { formatPretty, formatSummary } from './utils/format.js';
+import type { DataType, WhoopData } from './types/whoop.js';
 
 const program = new Command();
+
+function output(data: WhoopData, pretty: boolean): void {
+  console.log(pretty ? formatPretty(data) : JSON.stringify(data, null, 2));
+}
 
 program
   .name('whoopskill')
@@ -45,6 +50,7 @@ function addDataCommand(name: string, description: string, dataType: DataType): 
     .option('-e, --end <date>', 'End date for range query')
     .option('-l, --limit <number>', 'Max results per page', '25')
     .option('-a, --all', 'Fetch all pages')
+    .option('-p, --pretty', 'Human-readable output')
     .action(async (options) => {
       try {
         const date = options.date || getWhoopDay();
@@ -57,7 +63,7 @@ function addDataCommand(name: string, description: string, dataType: DataType): 
           all: options.all,
         });
 
-        console.log(JSON.stringify(result, null, 2));
+        output(result, options.pretty);
       } catch (error) {
         handleError(error);
       }
@@ -72,9 +78,28 @@ addDataCommand('profile', 'Get profile data', 'profile');
 addDataCommand('body', 'Get body measurements', 'body');
 
 program
+  .command('summary')
+  .description('One-liner health snapshot')
+  .option('-d, --date <date>', 'Date in ISO format (YYYY-MM-DD)')
+  .action(async (options) => {
+    try {
+      const date = options.date || getWhoopDay();
+      if (options.date && !validateISODate(options.date)) {
+        throw new WhoopError('Invalid date format. Use YYYY-MM-DD', ExitCode.GENERAL_ERROR);
+      }
+
+      const result = await fetchData(['recovery', 'sleep', 'cycle', 'workout'], date, { limit: 25 });
+      console.log(formatSummary(result));
+    } catch (error) {
+      handleError(error);
+    }
+  });
+
+program
   .option('-d, --date <date>', 'Date in ISO format (YYYY-MM-DD)')
   .option('-l, --limit <number>', 'Max results per page', '25')
   .option('-a, --all', 'Fetch all pages')
+  .option('-p, --pretty', 'Human-readable output')
   .option('--sleep', 'Include sleep data')
   .option('--recovery', 'Include recovery data')
   .option('--workout', 'Include workout data')
@@ -106,7 +131,7 @@ program
           ? await fetchData(types, date, fetchOptions)
           : await fetchAllTypes(date, fetchOptions);
 
-      console.log(JSON.stringify(result, null, 2));
+      output(result, options.pretty);
     } catch (error) {
       handleError(error);
     }
