@@ -1,12 +1,12 @@
 import { Command } from 'commander';
-import { login, logout, status as authStatus } from './auth/oauth.js';
+import { login, logout, status as authStatus, refresh as authRefresh } from './auth/oauth.js';
 import { fetchData, fetchAllTypes } from './api/client.js';
 import { getWhoopDay, validateISODate } from './utils/date.js';
 import { handleError, WhoopError, ExitCode } from './utils/errors.js';
 import { formatPretty, formatSummary } from './utils/format.js';
 import type { DataType, WhoopData } from './types/whoop.js';
 
-const program = new Command();
+export const program = new Command();
 
 function output(data: WhoopData, pretty: boolean): void {
   console.log(pretty ? formatPretty(data) : JSON.stringify(data, null, 2));
@@ -15,12 +15,12 @@ function output(data: WhoopData, pretty: boolean): void {
 program
   .name('whoopskill')
   .description('CLI for fetching WHOOP health data')
-  .version('1.0.0');
+  .version('1.0.3');
 
 program
   .command('auth')
   .description('Manage authentication')
-  .argument('<action>', 'login, logout, or status')
+  .argument('<action>', 'login, logout, status, or refresh')
   .action(async (action: string) => {
     try {
       switch (action) {
@@ -33,8 +33,11 @@ program
         case 'status':
           authStatus();
           break;
+        case 'refresh':
+          await authRefresh();
+          break;
         default:
-          throw new WhoopError(`Unknown auth action: ${action}`, ExitCode.GENERAL_ERROR);
+          throw new WhoopError(`Unknown auth action: ${action}. Use: login, logout, status, or refresh`, ExitCode.GENERAL_ERROR);
       }
     } catch (error) {
       handleError(error);
@@ -108,11 +111,6 @@ program
   .option('--body', 'Include body measurements')
   .action(async (options) => {
     try {
-      const date = options.date || getWhoopDay();
-      if (options.date && !validateISODate(options.date)) {
-        throw new WhoopError('Invalid date format. Use YYYY-MM-DD', ExitCode.GENERAL_ERROR);
-      }
-
       const types: DataType[] = [];
       if (options.sleep) types.push('sleep');
       if (options.recovery) types.push('recovery');
@@ -121,20 +119,23 @@ program
       if (options.profile) types.push('profile');
       if (options.body) types.push('body');
 
-      const fetchOptions = {
+      if (types.length === 0) {
+        program.help();
+        return;
+      }
+
+      const date = options.date || getWhoopDay();
+      if (options.date && !validateISODate(options.date)) {
+        throw new WhoopError('Invalid date format. Use YYYY-MM-DD', ExitCode.GENERAL_ERROR);
+      }
+
+      const result = await fetchData(types, date, {
         limit: parseInt(options.limit, 10),
         all: options.all,
-      };
-
-      const result =
-        types.length > 0
-          ? await fetchData(types, date, fetchOptions)
-          : await fetchAllTypes(date, fetchOptions);
+      });
 
       output(result, options.pretty);
     } catch (error) {
       handleError(error);
     }
   });
-
-export { program };

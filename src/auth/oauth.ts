@@ -1,7 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import { createInterface } from 'node:readline';
 import open from 'open';
-import { saveTokens, clearTokens, getTokenStatus } from './tokens.js';
+import { saveTokens, clearTokens, getTokenStatus, getValidTokens, isTokenExpired, loadTokens } from './tokens.js';
 import { WhoopError, ExitCode } from '../utils/errors.js';
 import type { OAuthTokenResponse } from '../types/whoop.js';
 
@@ -97,5 +97,57 @@ export function logout(): void {
 
 export function status(): void {
   const tokenStatus = getTokenStatus();
-  console.log(JSON.stringify(tokenStatus, null, 2));
+  const tokens = loadTokens();
+  
+  if (!tokenStatus.authenticated) {
+    console.log(JSON.stringify({ authenticated: false, message: 'Not logged in. Run: whoopskill auth login' }, null, 2));
+    return;
+  }
+
+  const now = Math.floor(Date.now() / 1000);
+  const expiresIn = tokenStatus.expires_at! - now;
+  const needsRefresh = isTokenExpired(tokens!);
+  
+  console.log(JSON.stringify({
+    authenticated: true,
+    expires_at: tokenStatus.expires_at,
+    expires_in_seconds: expiresIn,
+    expires_in_human: expiresIn > 0 ? `${Math.floor(expiresIn / 60)} minutes` : 'EXPIRED',
+    needs_refresh: needsRefresh,
+  }, null, 2));
+}
+
+/**
+ * Proactively refresh the access token.
+ * Use this in cron jobs to keep tokens fresh.
+ */
+export async function refresh(): Promise<void> {
+  const tokens = loadTokens();
+  
+  if (!tokens) {
+    throw new WhoopError('Not authenticated. Run: whoopskill auth login', ExitCode.AUTH_ERROR);
+  }
+
+  try {
+    const newTokens = await getValidTokens();
+    
+    const now = Math.floor(Date.now() / 1000);
+    const expiresIn = newTokens.expires_at - now;
+    
+    console.log(JSON.stringify({
+      success: true,
+      message: 'Token refreshed successfully',
+      expires_at: newTokens.expires_at,
+      expires_in_seconds: expiresIn,
+      expires_in_human: `${Math.floor(expiresIn / 60)} minutes`,
+    }, null, 2));
+  } catch (error) {
+    if (error instanceof WhoopError && error.message.includes('refresh')) {
+      throw new WhoopError(
+        'Refresh token expired. Please re-authenticate with: whoopskill auth login',
+        ExitCode.AUTH_ERROR
+      );
+    }
+    throw error;
+  }
 }

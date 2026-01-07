@@ -1,6 +1,6 @@
 {
   "name": "whoopskill",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "CLI for fetching WHOOP health data",
   "type": "module",
   "bin": {
