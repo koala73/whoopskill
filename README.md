@@ -81,9 +81,29 @@ whoopskill workout --all
 ## Auth Commands
 
 ```bash
-whoopskill auth login   # OAuth flow (opens browser)
-whoopskill auth status  # Check token status
-whoopskill auth logout  # Clear tokens
+whoopskill auth login    # OAuth flow (opens browser)
+whoopskill auth status   # Check token status
+whoopskill auth refresh  # Refresh access token using refresh token
+whoopskill auth logout   # Clear tokens
+```
+
+## Keeping tokens fresh (recommended for cron/servers)
+
+If you run `whoopskill` from cron/systemd, you may occasionally see authentication failures if a token refresh is missed or the token file becomes stale.
+
+Recommended pattern:
+- Run `whoopskill auth login` once interactively (creates `~/.whoop-cli/tokens.json`).
+- Run a small periodic monitor that calls `whoopskill auth refresh` and performs a lightweight fetch.
+
+An example monitor script + systemd timer/cron examples are included here:
+- `examples/monitor/whoop-refresh-monitor.sh`
+- `examples/monitor/systemd/*`
+- `examples/monitor/cron/README-cron.txt`
+
+If refresh fails with an expired refresh token, you must re-authenticate:
+
+```bash
+whoopskill auth login
 ```
 
 ## Data Types

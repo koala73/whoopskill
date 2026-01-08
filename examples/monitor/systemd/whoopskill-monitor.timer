@@ -1,0 +1,10 @@
+[Unit]
+Description=Run whoopskill monitor periodically
+
+[Timer]
+# Every 30 minutes (adjust to taste)
+OnBootSec=5m
+OnUnitActiveSec=30m
+
+[Install]
+WantedBy=timers.target
