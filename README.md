@@ -91,6 +91,10 @@ whoopskill auth logout   # Clear tokens
 
 If you run `whoopskill` from cron/systemd, you may occasionally see authentication failures if a token refresh is missed or the token file becomes stale.
 
+Important:
+- `whoopskill auth status` **does not refresh tokens** — it only reports whether they’re expired.
+- For automation, you must call `whoopskill auth refresh` periodically.
+
 Recommended pattern:
 - Run `whoopskill auth login` once interactively (creates `~/.whoop-cli/tokens.json`).
 - Run a small periodic monitor that calls `whoopskill auth refresh` and performs a lightweight fetch.
